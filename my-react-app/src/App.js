@@ -1,34 +1,33 @@
-import React from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
+// Import des composants
+import HomePage from './homepage.jsx';
+import SearchPage from './searchpage';
+import UserDashboard from './userdashboard';
+import TripDetails from './tripCard';
+import Login from './login';
+import Signup from './signup';
 
 function App() {
-    const { user, loginWithRedirect, isAuthenticated, logout, isLoading, error } = useAuth0();
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Oops! {error.message}</div>;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
 
     return (
-        <div className="App">
-            <header className="App-header">
-                {isAuthenticated && <h3>Hello {user.name}</h3>}
-
-                {isAuthenticated ? (
-                    <button onClick={() => logout()}>
-                        Logout
-                    </button>
-
-                ) : (
-                    <button onClick={() => loginWithRedirect()}>
-                        Login
-                    </button>
-                )}
-            </header>
-        </div>
-
+        <Router>
+            <div className="app">
+                <Routes>
+                    <Route path="/" element={<HomePage isAuthenticated={isAuthenticated} />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/dashboard" element={<UserDashboard user={user} />} />
+                    <Route path="/trip/:id" element={<TripDetails />} />
+                    <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
+                    <Route path="/signup" element={<Signup />} />
+                </Routes>
+            </div>
+        </Router>
     );
-
 }
 
 export default App;
