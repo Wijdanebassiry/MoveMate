@@ -1,20 +1,22 @@
-package com.movemate.example.demo;
+package com.movemate.backend.controller;
 
-import com.example.demo.service.HelloService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@CrossOrigin(origins = "http://localhost:3000")  // Autorise React à appeler ce backend
 @RestController
+@RequestMapping("/api")
 public class HelloController {
 
-    private final com.movemate.example.demo.HelloService helloService;
-
-    public HelloController(HelloService helloService) {
-        this.helloService = helloService;
-    }
-
     @GetMapping("/hello")
-    public String sayHello() {
-        return helloService.getGreeting();
+    public Map<String, String> hello() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello depuis le backend Spring Boot !");
+        return response;
     }
 }
